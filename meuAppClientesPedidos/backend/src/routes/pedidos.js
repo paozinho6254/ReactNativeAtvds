@@ -4,8 +4,8 @@ import { Pedido } from "../models/pedido.js";
 const router = express.Router();
 
 router.post("/", (req, res) => {
-  const { clienteId, valor, descricao } = req.body;
-  Pedido.criar(clienteId, valor, descricao, (err) => {
+  const { clienteId, valor, produto } = req.body;
+  Pedido.criar(clienteId, valor, produto, (err) => {
     if (err) return res.status(500).json(err);
     res.json({ message: "Pedido inserido com sucesso!" });
   });
