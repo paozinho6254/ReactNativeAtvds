@@ -1,9 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react'; // Mantenha useCallback, mas usaremos de forma diferente
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, useWindowDimensions, Linking } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, useWindowDimensions, StatusBar } from 'react-native';
 import { Image } from 'expo-image';
 import { getTankDetails, getTankImageUrl, getTankHtml } from '../services/wikipedia';
 import RenderHtml from 'react-native-render-html';
 
+const COLORS = {
+  background: '#121212',
+  card: '#1E1E1E',
+  primaryText: '#EAEAEA',
+  secondaryText: '#B0B0B0',
+  accent: '#03DAC5',
+  link: '#61dafb',
+};
 
 const CustomImageRenderer = ({ tnode, contentWidth }) => {
   if (!tnode || !tnode.attributes) {
@@ -13,7 +21,6 @@ const CustomImageRenderer = ({ tnode, contentWidth }) => {
 
   const { src, alt, width: imgWidth, height: imgHeight } = tnode.attributes;
 
-  // Se 'src' não existir, também não podemos renderizar a imagem.
   if (!src) {
     console.warn("CustomImageRenderer: src da imagem é undefined ou vazio.", tnode.attributes);
     return null;
@@ -66,8 +73,6 @@ const TankDetailsScreen = ({ route }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Define os renderers aqui, usando useCallback para memoizar o objeto de renderers
-  // Isso garante que 'renderers' seja o mesmo objeto entre renderizações, se suas dependências não mudarem.
   const customRenderers = useCallback(() => ({
     img: (tnode, children, convertedCSSStyles, passProps) => (
       <CustomImageRenderer tnode={tnode} contentWidth={width - 40} {...passProps} />
@@ -100,8 +105,10 @@ const TankDetailsScreen = ({ route }) => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Carregando detalhes do {tankTitle}...</Text>
+        <ActivityIndicator size="large" color={COLORS.accent} />
+        <Text style={{ color: COLORS.secondaryText, marginTop: 10 }}>
+          Carregando detalhes do {tankTitle}...
+        </Text>
       </View>
     );
   }
@@ -115,22 +122,22 @@ const TankDetailsScreen = ({ route }) => {
   }
 
   const tagsStyles = {
-    p: { fontSize: 16, lineHeight: 24, marginBottom: 10 },
-    h1: { fontSize: 28, fontWeight: 'bold', marginBottom: 15, textAlign: 'center' },
-    h2: { fontSize: 22, fontWeight: 'bold', marginBottom: 10, marginTop: 15, borderBottomWidth: 1, borderBottomColor: '#eee', paddingBottom: 5 },
-    h3: { fontSize: 18, fontWeight: 'bold', marginBottom: 8, marginTop: 10, color: '#333' },
-    li: { fontSize: 16, lineHeight: 24, marginBottom: 5 },
+    p: { color: COLORS.primaryText, fontSize: 16, lineHeight: 24, marginBottom: 10 },
+    h2: { color: COLORS.primaryText, fontSize: 22, fontWeight: 'bold', marginBottom: 10, marginTop: 15, borderBottomWidth: 1, borderBottomColor: COLORS.card, paddingBottom: 5 },
+    h3: { color: COLORS.secondaryText, fontSize: 18, fontWeight: 'bold', marginBottom: 8, marginTop: 10 },
+    li: { color: COLORS.primaryText, fontSize: 16, lineHeight: 24, marginBottom: 5 },
     ul: { marginBottom: 10, marginLeft: 20 },
-    ol: { marginBottom: 10, marginLeft: 20 },
-    a: { color: '#007bff', textDecorationLine: 'underline' },
-    table: { width: '100%', marginBottom: 15, borderCollapse: 'collapse' },
-    th: { padding: 8, borderWidth: 1, borderColor: '#ccc', fontWeight: 'bold', backgroundColor: '#f0f0f0' },
-    td: { padding: 8, borderWidth: 1, borderColor: '#ccc' },
+    a: { color: COLORS.link, textDecorationLine: 'underline' },
+    table: { width: '100%', marginBottom: 15, borderCollapse: 'collapse', color: COLORS.primaryText },
+    th: { padding: 8, borderWidth: 1, borderColor: COLORS.card, fontWeight: 'bold', backgroundColor: '#2a2a2a' },
+    td: { padding: 8, borderWidth: 1, borderColor: COLORS.card },
   };
+
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{tankData.details.title}</Text>
+      <StatusBar barStyle="light-content" />
+
       {imageUrl ? (
         <Image
           source={{
@@ -170,25 +177,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.background,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    textAlign: 'center',
+    backgroundColor: COLORS.background,
   },
   image: {
     width: '100%',
     height: 250,
     marginBottom: 20,
     borderRadius: 8,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: COLORS.card,
+  },
+  extract: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: COLORS.primaryText,
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 50,
   },
   noImageContainer: {
     width: '100%',
@@ -199,19 +212,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  noImageText: {
-    color: '#666',
-    fontSize: 16,
-  },
-  extract: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  errorText: {
-    fontSize: 18,
-    color: 'red',
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 15,
     textAlign: 'center',
-    marginTop: 50,
   },
 });
 
