@@ -39,18 +39,13 @@ export const getTankDetails = async (title) => {
         action: 'query',
         format: 'json',
         prop: 'extracts|pageimages',
-        explaintext: true, // Já está true, o que é bom
+        explaintext: true,
         titles: title,
         pithumbsize: 400,
         redirects: 1,
-        // *** Novas opções para tentar limpar o extract ***
-        exsectionformat: 'wiki', // Mantém títulos como ==Título== para ajudar no parsing manual
-        exlimit: 1, // Limita o extract a uma seção ou um número de parágrafos. Experimente.
-        exintro: true, // Retorna apenas a introdução (antes do primeiro título de seção)
-        // ou
-        // exchars: 1000, // Limita o número de caracteres do extract
-        // excontinue: true // Para obter mais de uma seção se exlimit for maior que 1
-        // Você pode ter que experimentar com 'exintro' e 'exlimit' para ver qual funciona melhor.
+        exsectionformat: 'wiki',
+        exlimit: 1,
+        exintro: true,
       },
     });
 
@@ -74,12 +69,8 @@ export const getTankHtml = async (title) => {
         format: 'json',
         page: title,
         prop: 'text',
-        // Pode precisar de 'disablelimitreport', 'disabletoc' etc.
-        // Para obter apenas o HTML do conteúdo principal
-        // rw: '1' para remover avisos de edição, etc.
       },
     });
-    // A resposta terá o HTML dentro de response.data.parse.text['*']
     return response.data.parse.text['*'];
   } catch (error) {
     console.error(`Erro ao buscar HTML para "${title}":`, error);

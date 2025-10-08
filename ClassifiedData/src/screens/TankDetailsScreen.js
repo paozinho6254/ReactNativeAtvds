@@ -77,7 +77,7 @@ const TankDetailsScreen = ({ route }) => {
     img: (tnode, children, convertedCSSStyles, passProps) => (
       <CustomImageRenderer tnode={tnode} contentWidth={width - 40} {...passProps} />
     ),
-  }), [width]); // Recria o objeto de renderers se a largura da tela mudar
+  }), [width]);
 
   useEffect(() => {
     const fetchDetails = async () => {

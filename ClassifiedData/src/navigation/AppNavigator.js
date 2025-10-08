@@ -7,7 +7,6 @@ import TankDetailsScreen from '../screens/TankDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
-// Nossas cores para manter a consistência
 const COLORS = {
   background: '#121212',
   primaryText: '#EAEAEA',
@@ -19,7 +18,7 @@ const AppNavigator = () => {
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{
-          headerShown: false // Mantém o header oculto por padrão
+          headerShown: false
         }}
       >
         <Stack.Screen

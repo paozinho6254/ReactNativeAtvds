@@ -6,36 +6,32 @@ import TankCard from '../components/TankCard';
 
 // Paleta de cores para um tema moderno
 const COLORS = {
-  background: '#121212', // Um preto suave
-  card: '#1E1E1E',       // Um cinza escuro para os cards
-  primaryText: '#EAEAEA', // Texto principal quase branco
-  secondaryText: '#B0B0B0',// Texto secundário
-  accent: '#03DAC5',     // Cor de destaque (turquesa)
+  background: '#121212',
+  card: '#1E1E1E',
+  primaryText: '#EAEAEA',
+  secondaryText: '#B0B0B0',
+  accent: '#03DAC5',
 };
 
 const HomeScreen = ({ navigation }) => {
   const [tanks, setTanks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Função para buscar os dados de forma mais limpa
   const fetchTanksData = useCallback(async () => {
     try {
       setLoading(true);
       const fetchedTanks = await getColdWarTanks();
 
-      // Mapeia cada tanque para uma promessa que busca sua URL de imagem
       const tanksWithImagesPromises = fetchedTanks.map(async (tank) => {
         const imageUrl = await getTankImageUrl(tank.title);
-        return { ...tank, imageUrl }; // Combina os dados do tanque com sua URL
+        return { ...tank, imageUrl };
       });
 
-      // Aguarda todas as promessas serem resolvidas
       const tanksWithImages = await Promise.all(tanksWithImagesPromises);
 
       setTanks(tanksWithImages);
     } catch (error) {
       console.error("Falha ao buscar dados dos tanques:", error);
-      // Aqui você poderia adicionar um estado de erro para mostrar na UI
     } finally {
       setLoading(false);
     }
@@ -112,7 +108,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   row: {
-    justifyContent: 'space-between', // Garante alinhamento nas bordas
+    justifyContent: 'space-between',
   },
 });
 
