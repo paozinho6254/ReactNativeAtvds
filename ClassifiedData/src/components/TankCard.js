@@ -1,9 +1,8 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; // Importe o ícone
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// Cores correspondentes ao tema
 const COLORS = {
   card: '#1E1E1E',
   primaryText: '#EAEAEA',
@@ -18,7 +17,7 @@ const TankCard = ({ item, onPress }) => {
     <Pressable
       style={({ pressed }) => [
         styles.card,
-        { transform: [{ scale: pressed ? 0.97 : 1 }] }, // Efeito de escala ao pressionar
+        { transform: [{ scale: pressed ? 0.97 : 1 }] },
       ]}
       onPress={onPress}
     >
@@ -26,8 +25,8 @@ const TankCard = ({ item, onPress }) => {
         <Image
           source={{ uri: imageUrl }}
           style={styles.image}
-          contentFit="cover" // 'cover' preenche o espaço e fica mais bonito
-          transition={300} // Animação suave de fade-in
+          contentFit="cover"
+          transition={300}
         />
       ) : (
         <View style={styles.placeholderContainer}>
@@ -43,11 +42,11 @@ const TankCard = ({ item, onPress }) => {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1, // Ocupa o espaço disponível na coluna
+    flex: 1,
     backgroundColor: COLORS.card,
     borderRadius: 12,
     margin: 8,
-    overflow: 'hidden', // Garante que a imagem com borda arredondada não vaze
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     padding: 12,
-    height: 60, // Altura fixa para alinhar os cards na grid
+    height: 60,
     justifyContent: 'center',
   },
   title: {
